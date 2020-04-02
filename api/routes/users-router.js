@@ -22,4 +22,14 @@ router.get("/:id", restricted, (req, res) => {
   }
 });
 
+router.get("/by-potluck/:id", restricted, async (req, res) => {
+  try {
+    const { id } = req.params;
+    let users = await Users.findByPotluckId(id);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 module.exports = router;
