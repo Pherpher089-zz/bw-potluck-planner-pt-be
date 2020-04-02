@@ -50,16 +50,15 @@ async function findByUserId(userId) {
     .where("usersPotlucks.userId", Number(userId));
 }
 
-
 async function findAdminPotlucks(userId) {
   return await db("potlucks")
     .join("usersPotlucks", { "potlucks.id": "usersPotlucks.potluckId" })
     .where("usersPotlucks.role", 0)
-    .andWhere("userId", Number(userId))
+    .andWhere("userId", Number(userId));
 }
 
 async function findMyPotlucks(userId) {
   return await db("potlucks")
     .join("usersPotlucks", { "potlucks.id": "usersPotlucks.potluckId" })
-    .where("userId", Number(userId))
+    .where("userId", Number(userId));
 }

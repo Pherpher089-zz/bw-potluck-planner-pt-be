@@ -11,10 +11,12 @@ module.exports = router;
 router.post("/", restricted, async (req, res) => {
   try {
     let newPotluck = req.body;
+    console.log(newPotluck);
     let {
       locationName,
       locationAddress,
       locationStreet,
+      locationUnit,
       locationState,
       locationCity,
       locationCountry,
@@ -24,6 +26,7 @@ router.post("/", restricted, async (req, res) => {
       !locationName ||
       !locationAddress ||
       !locationStreet ||
+      !locationUnit ||
       !locationState ||
       !locationCity ||
       !locationCountry ||
@@ -60,7 +63,18 @@ router.get("/", restricted, async (req, res) => {
     let potlucks = await Potlucks.findMyPotlucks(req.id);
     res.status(200).json(potlucks);
   } catch (error) {
-    res.status(500).error;
+    res.status(500).json(error);
+  }
+});
+
+router.get("/:id", restricted, async (req, res) => {
+  try {
+    let potluckId = req.params.id;
+    console.log(potluckId);
+    let potluck = await Potlucks.findById(potluckId);
+    res.status(200).json(potluck);
+  } catch (error) {
+    res.status(500).json(error);
   }
 });
 
@@ -115,12 +129,10 @@ router.post("/reqs/:id", restricted, async (req, res) => {
       await PotluckRequirements.insert(response);
       res.status(200).json(response);
     } else {
-      res
-        .status(400)
-        .json({
-          message:
-            "you are not an organizer of this potluck, so you can't add requirements to it"
-        });
+      res.status(400).json({
+        message:
+          "you are not an organizer of this potluck, so you can't add requirements to it"
+      });
     }
   } catch (error) {
     res.status(500).error;

@@ -3,6 +3,12 @@ const restricted = require("../../auth/restricted-middleware.js");
 
 const router = require("express").Router();
 
+router.get("/all", (req, res) => {
+  Users.getAllUsers()
+    .then(users => res.json(users))
+    .catch(err => res.status(500).json(err));
+});
+
 router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   if (req.id == id) {
