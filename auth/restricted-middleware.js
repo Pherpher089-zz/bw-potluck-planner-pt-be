@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 const secrets = process.env.JWT_SECRET || "lambda";
 
-
 module.exports = (req, res, next) => {
-  const token = req.headers.authorization;
+  const token = req.headers.auth;
 
   if (token) {
     jwt.verify(token, secrets, (err, payload) => {
