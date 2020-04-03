@@ -70,8 +70,8 @@ router.get("/", restricted, async (req, res) => {
 router.get("/:id", restricted, async (req, res) => {
   try {
     let potluckId = req.params.id;
-    console.log(potluckId);
-    let potluck = await Potlucks.findById(potluckId);
+    let id = req.id;
+    let potluck = await Potlucks.findById(potluckId, id);
     res.status(200).json(potluck);
   } catch (error) {
     res.status(500).json(error);

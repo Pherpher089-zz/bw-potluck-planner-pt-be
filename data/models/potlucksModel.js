@@ -16,10 +16,11 @@ async function getAll() {
   return await db("potlucks");
 }
 
-async function findById(id) {
+async function findById(id, userId) {
   return await db("potlucks")
-    .where({ id: Number(id) })
-    .first();
+    .join("usersPotlucks", { "potlucks.id": "usersPotlucks.potluckId" })
+    .where("userId", Number(userId))
+    .andWhere("potluckId", Number(id));
 }
 
 async function insert(record) {
