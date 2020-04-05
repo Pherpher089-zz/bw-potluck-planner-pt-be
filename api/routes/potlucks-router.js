@@ -100,13 +100,17 @@ router.post("/user/add", restricted, async (req, res) => {
   }
 });
 
-router.delete("/user/remove", async (req, res) => {
+router.post("/user/remove", restricted, async (req, res) => {
   try {
     let { potluckId, userId } = req.body;
-    console.log(potluckId, userId);
-    if (!potluckId || !userId) {
+    if (!userId) {
       res.status(400).json({
-        message: " Please provide a valid potluckId and userId",
+        message: " Please provide a valid userId",
+      });
+    }
+    if (!potluckId) {
+      res.status(400).json({
+        message: " Please provide a valid potluckId",
       });
     }
     let user = await UsersPotlucks.findByUserIdAndPotluckId(userId, potluckId);
