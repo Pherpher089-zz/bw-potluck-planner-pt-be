@@ -18,7 +18,7 @@ async function getAll() {
 
 async function findById(id) {
   return await db("potlucks")
-    .where({ id: Number(id) })
+    .where("id", Number(id))
     .first();
 }
 
