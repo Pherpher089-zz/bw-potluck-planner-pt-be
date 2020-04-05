@@ -141,7 +141,6 @@ router.post("/reqs/:id", restricted, async (req, res) => {
     let response = {
       foodCategory,
       foodDescription,
-      potluckId,
       servings,
       fufilled,
     };
@@ -165,6 +164,17 @@ router.get("/reqs/:id", restricted, async (req, res) => {
   try {
     const response = await PotluckRequirements.getByPotluckId(potluckId);
     res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+router.delete("/reqs/:id", restricted, async (req, res) => {
+  let reqId = req.params.id;
+  try {
+    await PotluckRequirements.remove(reqId);
+    res
+      .status(200)
+      .json({ message: `Potluck requirement ${reqId} has been removed` });
   } catch (error) {
     res.status(500).json(error);
   }
