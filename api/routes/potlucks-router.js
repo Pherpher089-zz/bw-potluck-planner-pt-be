@@ -20,7 +20,7 @@ router.post("/", restricted, async (req, res) => {
       locationState,
       locationCity,
       locationCountry,
-      locationPostcode
+      locationPostcode,
     } = req.body;
     if (
       !locationName ||
@@ -34,7 +34,7 @@ router.post("/", restricted, async (req, res) => {
     ) {
       res.status(400).json({
         message:
-          "please provide a name, address, street, state, city, country and postalcode"
+          "please provide a name, address, street, state, city, country and postalcode",
       });
     }
     await Potlucks.insert(newPotluck);
@@ -44,7 +44,7 @@ router.post("/", restricted, async (req, res) => {
       userId: req.id,
       potluckId: savedPotluck.id,
       role: 0,
-      attendance: 2
+      attendance: 2,
     };
     await UsersPotlucks.insert(newRelationship);
     let savedRelationship = await UsersPotlucks.findByUserIdAndPotluckId(
@@ -83,7 +83,7 @@ router.post("/user/add", restricted, async (req, res) => {
     if (!potluckId || !role || !email) {
       res.status(400).json({
         message:
-          "please provide a the potluckId of the potluck to add, as well as user's email and role"
+          "please provide a the potluckId of the potluck to add, as well as user's email and role",
       });
     }
     let user = await Users.findByEmail(email);
@@ -91,10 +91,27 @@ router.post("/user/add", restricted, async (req, res) => {
       userId: user.id,
       potluckId,
       role,
-      attendance: 2
+      attendance: 2,
     };
     await UsersPotlucks.insert(toInsert);
     res.status(200).json(toInsert);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.delete("/user/remove", async (req, res) => {
+  try {
+    let { potluckId, userId } = req.body;
+    console.log(potluckId, userId);
+    if (!potluckId || !userId) {
+      res.status(400).json({
+        message: " Please provide a valid potluckId and userId",
+      });
+    }
+    let user = await UsersPotlucks.findByUserIdAndPotluckId(userId, potluckId);
+    await UsersPotlucks.remove(user.id);
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -122,7 +139,7 @@ router.post("/reqs/:id", restricted, async (req, res) => {
       foodDescription,
       potluckId,
       servings,
-      fufilled
+      fufilled,
     };
     if (relationship && relationship.role === 0) {
       await PotluckRequirements.insert(response);
@@ -130,7 +147,7 @@ router.post("/reqs/:id", restricted, async (req, res) => {
     } else {
       res.status(400).json({
         message:
-          "you are not an organizer of this potluck, so you can't add requirements to it"
+          "you are not an organizer of this potluck, so you can't add requirements to it",
       });
     }
   } catch (error) {
@@ -157,7 +174,7 @@ router.put("/:id", restricted, async (req, res) => {
     let relationship = await UsersPotlucks.findByUserIdAndPotluckId(req.id, id);
     if (!potluck) {
       res.status(404).json({
-        message: "no such potluck"
+        message: "no such potluck",
       });
     } else if (relationship && relationship.role === 0) {
       await Potlucks.update(id, req.body);
@@ -166,7 +183,7 @@ router.put("/:id", restricted, async (req, res) => {
     } else {
       res.status(400).json({
         message:
-          "you are not an organizer of this potluck, so you cannot edit it"
+          "you are not an organizer of this potluck, so you cannot edit it",
       });
     }
   } catch (error) {
@@ -181,7 +198,7 @@ router.delete("/:id", restricted, async (req, res) => {
     let relationship = await UsersPotlucks.findByUserIdAndPotluckId(req.id, id);
     if (!potluck) {
       res.status(404).json({
-        message: "no such potluck"
+        message: "no such potluck",
       });
     } else if (relationship && relationship.role === 0) {
       await Potlucks.remove(id);
@@ -189,7 +206,7 @@ router.delete("/:id", restricted, async (req, res) => {
     } else {
       res.status(400).json({
         message:
-          "you are not an organizer of this potluck, so you cannot delete it"
+          "you are not an organizer of this potluck, so you cannot delete it",
       });
     }
   } catch (error) {
