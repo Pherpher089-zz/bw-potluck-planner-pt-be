@@ -3,6 +3,7 @@ const Potlucks = require("../../data/models/potlucksModel.js");
 const UsersPotlucks = require("../../data/models/usersPotlucksModel.js");
 const Users = require("../../data/models/usersModel.js");
 const PotluckRequirements = require("../../data/models/potluckRequirementsModel.js");
+const Food = require("../../data/models/foodModel.js");
 
 const router = require("express").Router();
 
@@ -134,25 +135,34 @@ router.post("/reqs/:id", restricted, async (req, res) => {
   let potluckId = req.params.id;
   let { foodCategory, foodDescription, servings, fufilled } = req.body;
   try {
-    let relationship = await UsersPotlucks.findByUserIdAndPotluckId(
-      req.id,
-      potluckId
-    );
     let response = {
+      potluckId,
       foodCategory,
       foodDescription,
       servings,
       fufilled,
     };
-    if (relationship && relationship.role === 0) {
-      await PotluckRequirements.insert(response);
-      res.status(200).json(response);
-    } else {
-      res.status(400).json({
-        message:
-          "you are not an organizer of this potluck, so you can't add requirements to it",
-      });
-    }
+    await PotluckRequirements.insert(response);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).error;
+  }
+});
+
+router.put("/reqs/:id", restricted, async (req, res) => {
+  let reqId = req.params.id;
+  let fufilled = req.id;
+  let { potluckId, foodCategory, foodDescription, servings } = req.body;
+  try {
+    let response = {
+      potluckId,
+      foodCategory,
+      foodDescription,
+      servings,
+      fufilled,
+    };
+    let resp = await PotluckRequirements.update(reqId, response);
+    res.status(200).json(resp);
   } catch (error) {
     res.status(500).error;
   }
@@ -223,6 +233,36 @@ router.delete("/:id", restricted, async (req, res) => {
           "you are not an organizer of this potluck, so you cannot delete it",
       });
     }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.get("/items/:id", restricted, async (req, res) => {
+  let id = req.params.id;
+  try {
+    let items = await Food.getByPotluckId(id);
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.post("/items/:id", restricted, async (req, res) => {
+  let id = req.params.id;
+  let userId = req.id;
+  let { foodCategory, foodDescription, servings } = req.body;
+
+  let newRecord = {
+    userId: userId,
+    potluckId: id,
+    foodCategory: foodCategory,
+    foodDescription: foodDescription,
+    servings: servings,
+  };
+  try {
+    let item = await Food.insert(newRecord);
+    res.status(200).json(item);
   } catch (error) {
     res.status(500).json(error);
   }
