@@ -3,6 +3,7 @@ const Potlucks = require("../../data/models/potlucksModel.js");
 const UsersPotlucks = require("../../data/models/usersPotlucksModel.js");
 const Users = require("../../data/models/usersModel.js");
 const PotluckRequirements = require("../../data/models/potluckRequirementsModel.js");
+const Food = require("../../data/models/foodModel.js");
 
 const router = require("express").Router();
 
@@ -223,6 +224,16 @@ router.delete("/:id", restricted, async (req, res) => {
           "you are not an organizer of this potluck, so you cannot delete it",
       });
     }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+router.get("/items/:id", restricted, async (req, res) => {
+  let id = req.params.id;
+  try {
+    let items = await Food.getByPotluckId(id);
+    res.status(200).json(items);
   } catch (error) {
     res.status(500).json(error);
   }
