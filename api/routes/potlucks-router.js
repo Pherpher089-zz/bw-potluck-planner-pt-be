@@ -149,6 +149,25 @@ router.post("/reqs/:id", restricted, async (req, res) => {
   }
 });
 
+router.put("/reqs/:id", restricted, async (req, res) => {
+  let reqId = req.params.id;
+  let fufilled = req.id;
+  let { potluckId, foodCategory, foodDescription, servings } = req.body;
+  try {
+    let response = {
+      potluckId,
+      foodCategory,
+      foodDescription,
+      servings,
+      fufilled,
+    };
+    let resp = await PotluckRequirements.update(reqId, response);
+    res.status(200).json(resp);
+  } catch (error) {
+    res.status(500).error;
+  }
+});
+
 router.get("/reqs/:id", restricted, async (req, res) => {
   let potluckId = req.params.id;
   console.log(potluckId);
