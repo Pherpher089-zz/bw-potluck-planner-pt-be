@@ -5,16 +5,27 @@ const router = require("express").Router();
 
 router.get("/all", (req, res) => {
   Users.getAllUsers()
-    .then(users => res.json(users))
-    .catch(err => res.status(500).json(err));
+    .then((users) => res.json(users))
+    .catch((err) => res.status(500).json(err));
+});
+
+router.get("/current", restricted, async (req, res) => {
+  try {
+    const id = req.id;
+    const user = await Users.findById(id);
+    console.log(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   if (req.id == id) {
     Users.findById(id)
-      .then(user => res.json(user))
-      .catch(err => res.status(500).json(err));
+      .then((user) => res.json(user))
+      .catch((err) => res.status(500).json(err));
   } else {
     res
       .status(401)
