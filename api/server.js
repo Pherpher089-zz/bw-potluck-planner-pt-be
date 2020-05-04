@@ -8,15 +8,8 @@ const potlucksRouter = require("./routes/potlucks-router.js");
 const foodRouter = require("./routes/food-router.js");
 
 const server = express();
-var whitelist = ["https://optimistic-chandrasekhar-e286d4.netlify.app"];
 var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: "https://optimistic-chandrasekhar-e286d4.netlify.app",
 };
 server.use(cors(corsOptions));
 
