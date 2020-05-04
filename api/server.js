@@ -8,9 +8,9 @@ const potlucksRouter = require("./routes/potlucks-router.js");
 const foodRouter = require("./routes/food-router.js");
 
 const server = express();
-// var corsOptions = {
-//   origin: "https://optimistic-chandrasekhar-e286d4.netlify.app/",
-// };
+var corsOptions = {
+  origin: "https://optimistic-chandrasekhar-e286d4.netlify.app",
+};
 server.use(cors(corsOptions));
 
 server.use("/api/auth", authRouter);
