@@ -5,20 +5,19 @@ const morgan = require("morgan");
 const authRouter = require("../auth/auth-router.js");
 const usersRouter = require("./routes/users-router.js");
 const potlucksRouter = require("./routes/potlucks-router.js");
-const foodRouter = require("./routes/food-router.js")
+const foodRouter = require("./routes/food-router.js");
 
 const server = express();
 var corsOptions = {
-  origin: 'http://localhost:3000/',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-n(), morgan("dev"));
+  origin: "https://optimistic-chandrasekhar-e286d4.netlify.app/",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 server.use(cors(corsOptions));
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/potlucks", potlucksRouter);
-server.use("/api/food", foodRouter)
+server.use("/api/food", foodRouter);
 
 server.get("/", async (req, res) => {
   res.send("😋");
