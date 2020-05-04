@@ -9,7 +9,7 @@ const foodRouter = require("./routes/food-router.js");
 
 const server = express();
 var corsOptions = {
-  origin: "https://optimistic-chandrasekhar-e286d4.netlify.app",
+  origin: "https://optimistic-chandrasekhar-e286d4.netlify.app/",
 };
 server.use(cors(corsOptions));
 
