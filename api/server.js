@@ -8,9 +8,12 @@ const potlucksRouter = require("./routes/potlucks-router.js");
 const foodRouter = require("./routes/food-router.js")
 
 const server = express();
-
-server.use(helm(), express.json(), morgan("dev"));
-server.use(cors());
+var corsOptions = {
+  origin: 'http://localhost:3000/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+n(), morgan("dev"));
+server.use(cors(corsOptions));
 
 server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
