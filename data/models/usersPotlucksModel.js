@@ -7,7 +7,7 @@ module.exports = {
   update,
   remove,
   findByUserIdAndPotluckId,
-  findAdminPotlucks
+  findAdminPotlucks,
 };
 
 async function getAll() {
@@ -25,15 +25,11 @@ async function insert(record) {
 }
 
 async function update(id, potluck) {
-  return await db("usersPotlucks")
-    .where("id", Number(id))
-    .update(potluck);
+  return await db("usersPotlucks").where("id", Number(id)).update(potluck);
 }
 
 async function remove(id) {
-  return await db("usersPotlucks")
-    .where("id", Number(id))
-    .del();
+  return await db("usersPotlucks").where("id", Number(id)).del();
 }
 
 async function findByUserIdAndPotluckId(userId, potluckId) {
@@ -44,7 +40,5 @@ async function findByUserIdAndPotluckId(userId, potluckId) {
 }
 
 async function findAdminPotlucks(userId) {
-  return await db("usersPotlucks")
-    .where({ userId })
-    .andWhere("role", 0);
+  return await db("usersPotlucks").where({ userId }).andWhere("role", 0);
 }
