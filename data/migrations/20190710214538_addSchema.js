@@ -1,18 +1,15 @@
-exports.up = async function(knex) {
+exports.up = async function (knex) {
   await knex.schema.dropTableIfExists("potluck_planner");
-  await knex.schema.createTable("users", tbl => {
+  await knex.schema.createTable("users", (tbl) => {
     tbl.increments("id");
 
     tbl.string("firstName").notNullable();
     tbl.string("lastName").notNullable();
-    tbl
-      .string("email")
-      .unique()
-      .notNullable();
+    tbl.string("email").unique().notNullable();
     tbl.string("password").notNullable();
   });
 
-  await knex.schema.createTable("potlucks", tbl => {
+  await knex.schema.createTable("potlucks", (tbl) => {
     tbl.increments("id");
     tbl.string("locationName").notNullable().unique();
     tbl.integer("locationAddress").notNullable();
@@ -24,49 +21,38 @@ exports.up = async function(knex) {
     tbl.string("locationPostcode").notNullable();
   });
 
-  await knex.schema.createTable("usersPotlucks", tbl => {
+  await knex.schema.createTable("usersPotlucks", (tbl) => {
     tbl.increments("id");
     tbl.integer("userId").notNullable();
     tbl.integer("potluckId").notNullable();
     tbl.integer("role").notNullable();
     tbl.integer("attendance");
-    tbl
-      .foreign("potluckId")
-      .references("id")
-      .inTable("potlucks");
+    tbl.foreign("potluckId").references("id").inTable("potlucks");
   });
 
-  await knex.schema.createTable("potluckItems", tbl => {
+  await knex.schema.createTable("potluckItems", (tbl) => {
     tbl.increments("id");
     tbl.integer("userId").notNullable();
     tbl.integer("potluckId").notNullable();
     tbl.string("foodCategory").notNullable();
     tbl.string("foodDescription").notNullable();
     tbl.integer("servings").notNullable();
-    tbl
-      .foreign("userId")
-      .references("id")
-      .inTable("users");
-    tbl
-      .foreign("potluckId")
-      .references("id")
-      .inTable("potlucks");
+    tbl.foreign("userId").references("id").inTable("users");
+
+    tbl.foreign("potluckId").references("id").inTable("potlucks");
   });
-  await knex.schema.createTable("potluckRequirements", tbl => {
+  await knex.schema.createTable("potluckRequirements", (tbl) => {
     tbl.increments("id");
     tbl.integer("potluckId").notNullable();
     tbl.string("foodCategory").notNullable();
     tbl.string("foodDescription").notNullable();
     tbl.integer("servings").notNullable();
     tbl.boolean("fufilled");
-    tbl
-      .foreign("potluckId")
-      .references("id")
-      .inTable("potlucks");
+    tbl.foreign("potluckId").references("id").inTable("potlucks");
   });
 };
 
-exports.down = async function(knex) {
+exports.down = async function (knex) {
   await knex.schema.dropTableIfExists("users");
   await knex.schema.dropTableIfExists("usersPotlucks");
   await knex.schema.dropTableIfExists("potlucks");
