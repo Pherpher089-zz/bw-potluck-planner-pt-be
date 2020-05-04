@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-
+    console.log("You are here");
     res.status(500).json(error);
   }
 });
